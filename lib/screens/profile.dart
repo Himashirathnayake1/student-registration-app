@@ -83,7 +83,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body:
           isLoading
-              ? const Center(child: CircularProgressIndicator(color: Colors.deepOrange,))
+              ? const Center(
+                child: CircularProgressIndicator(color: Colors.deepOrange),
+              )
               : Padding(
                 padding: const EdgeInsets.all(16),
                 child: Form(
@@ -104,9 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       TextFormField(
                         initialValue: email,
                         decoration: const InputDecoration(labelText: 'Email'),
-                        onChanged: (val) => email = val,
-                        validator:
-                            (val) => val!.isEmpty ? 'Enter your email' : null,
+                        enabled: false,
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
