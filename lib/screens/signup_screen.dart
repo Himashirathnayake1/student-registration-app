@@ -25,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      // Save student info in Firestore
+  
       await FirebaseFirestore.instance
           .collection('students')
           .doc(userCredential.user!.uid)
