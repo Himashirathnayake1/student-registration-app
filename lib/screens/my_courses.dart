@@ -5,6 +5,47 @@ import '../models/course.dart';
 
 class MyCoursesScreen extends StatelessWidget {
   const MyCoursesScreen({super.key});
+    Future<List<Map<String, String>>> _fetchAssignmentsWithGrade(String courseId) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    List<Map<String, String>> result = [];
+
+    try {
+      // Get all assignments for this course
+      final assignmentSnapshot = await FirebaseFirestore.instance
+          .collection('courses')
+          .doc(courseId)
+          .collection('assignments')
+          .get();
+
+      for (var assignmentDoc in assignmentSnapshot.docs) {
+        final assignmentId = assignmentDoc.id;
+
+        // Get all grade documents inside this assignment
+        final gradesSnapshot = await FirebaseFirestore.instance
+            .collection('courses')
+            .doc(courseId)
+            .collection('assignments')
+            .doc(assignmentId)
+            .collection('grades')
+            .get();
+
+        for (var gradeDoc in gradesSnapshot.docs) {
+          final students = List<String>.from(gradeDoc.data()['students'] ?? []);
+          if (students.contains(uid)) {
+            // If current user is in this grade
+            result.add({
+              'assignment': assignmentId,
+              'grade': gradeDoc.id, // document id is grade (A, B, C)
+            });
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error fetching assignments with grade: $e");
+    }
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +114,34 @@ class MyCoursesScreen extends StatelessWidget {
                   ),
                   isThreeLine: true,
                   trailing: const Icon(Icons.check_circle, color: Colors.green),
+                onTap: () async {
+                    // fetch assignments with grade
+                    final assignmentsWithGrade = await _fetchAssignmentsWithGrade(course.id);
+
+                    if (assignmentsWithGrade.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("No grades available for you yet.")),
+                      );
+                      return;
+                    }
+
+                    // Show in bottom sheet
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return ListView.builder(
+                          itemCount: assignmentsWithGrade.length,
+                          itemBuilder: (context, i) {
+                            final item = assignmentsWithGrade[i];
+                            return ListTile(
+                              title: Text("Assignment: ${item['assignment']}"),
+                              subtitle: Text("Your Grade: ${item['grade']}"),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               );
             },
