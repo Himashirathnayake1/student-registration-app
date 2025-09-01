@@ -10,13 +10,25 @@ class AppTheme {
       scaffoldBackgroundColor: Colors.grey[100],
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
-            fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
+          fontSize: 26,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+        headlineSmall: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.deepOrange,
+        ),
+
         bodyMedium: TextStyle(fontSize: 16, color: Colors.black54),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -26,8 +38,9 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepOrange,
           foregroundColor: Colors.black,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),

@@ -39,6 +39,7 @@ class CourseListScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator(color: Colors.deepOrange,));
+          
           }
 
           final courses =
